@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2023 The Android Open Source Project
+ * Copyright (C) 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,14 +16,10 @@
 package com.example.marsphotos.ui.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Text
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,15 +32,13 @@ import com.example.marsphotos.ui.theme.MarsPhotosTheme
 
 @Composable
 fun HomeScreen(
-    marsUiState: MarsUiState, modifier: Modifier = Modifier
+    marsUiState: MarsUiState,
+    modifier: Modifier = Modifier
 ) {
     when (marsUiState) {
-        is MarsUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
-        is MarsUiState.Success -> ResultScreen(
-            marsUiState.photos, modifier = modifier.fillMaxWidth()
-        )
-
-        is MarsUiState.Error -> ErrorScreen( modifier = modifier.fillMaxSize())
+        is MarsUiState.Loading -> LoadingScreen(modifier)
+        is MarsUiState.Success -> ResultScreen(marsUiState.photos, modifier)
+        is MarsUiState.Error -> ErrorScreen(modifier)
     }
 }
 
@@ -53,40 +47,41 @@ fun HomeScreen(
  */
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
-    Image(
-        modifier = modifier.size(200.dp),
-        painter = painterResource(R.drawable.loading_img),
-        contentDescription = stringResource(R.string.loading)
-    )
-}
-
-/**
- * The home screen displaying error message with re-attempt button.
- */
-@Composable
-fun ErrorScreen(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier.fillMaxSize()
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_connection_error), contentDescription = ""
+            modifier = Modifier.size(200.dp),
+            painter = painterResource(R.drawable.loading_img),
+            contentDescription = stringResource(R.string.loading)
         )
-        Text(text = stringResource(R.string.loading_failed), modifier = Modifier.padding(16.dp))
     }
 }
 
 /**
- * ResultScreen displaying number of photos retrieved.
+ * The home screen displaying error message
+ */
+@Composable
+fun ErrorScreen(modifier: Modifier = Modifier) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier.fillMaxSize()
+    ) {
+        Text(stringResource(R.string.loading_failed))
+    }
+}
+
+/**
+ * The home screen displaying number of retrieved photos.
  */
 @Composable
 fun ResultScreen(photos: String, modifier: Modifier = Modifier) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier
+        modifier = modifier.fillMaxSize()
     ) {
-        Text(text = photos)
+        Text(photos)
     }
 }
 
@@ -108,8 +103,8 @@ fun ErrorScreenPreview() {
 
 @Preview(showBackground = true)
 @Composable
-fun PhotosGridScreenPreview() {
+fun ResultScreenPreview() {
     MarsPhotosTheme {
-        ResultScreen(stringResource(R.string.placeholder_success))
+        ResultScreen(stringResource(R.string.result))
     }
 }
